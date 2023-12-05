@@ -1,5 +1,11 @@
 #pragma once
 
+/*
+Author: Serge Reinov
+Git source: https://github.com/sergereinov/cpp17-eventbus
+License: MIT
+*/
+
 #include <memory>
 #include <functional>
 #include <map>
