@@ -24,6 +24,8 @@ Just copy the eventbus.h header file to where you need it.
 
 TODO: add api mini-description.
 
+TODO: describe the warning about capturing `this` in lambda callback - the captured object can not be moved because its address has been captured (obviously) and stored in long-life storage in the eventbus system.
+
 Here are a couple of src examples.
 
 ```C++
