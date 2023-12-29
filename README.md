@@ -2,9 +2,6 @@
 
 This lib was inspired by https://github.com/gelldur/EventBus
 
-I think Gelldur's EventBus is too complicated and overloaded with anticipating uses.
-But when I came across this project, I was fascinated by its simple idea of getting a numeric ID for any CopyConstructable type.
-
 I often need some kind of simple system of cross-coupling callbacks. Some kind of event bus system.
 This is a cross-coupling from a call stack perspective.
 And this is a decoupling system from an architectural point of view.
@@ -15,7 +12,7 @@ But after seeing Gelldur’s eventbus, I realized that it was time to highlight 
 It seemed reasonable to me to remove everything unnecessary from the project, everything that is not related to the task of systematizing callbacks.
 Thus, for example, I transferred the responsibility of working with multithreading to the use side and abandoned any inter-threaded synchronization.
 
-So this project is a compilation of ideas from various sources and mainly from Gelldur's eventbus.
+So this project is a compilation of ideas from various sources and partly from Gelldur's Eventbus.
 
 ## How attach it to your project
 Just copy the eventbus.h header file to where you need it.
@@ -26,7 +23,7 @@ TODO: add api mini-description.
 
 TODO: describe the warning about capturing `this` in lambda callback - the captured object can not be moved because its address has been captured (obviously) and stored in long-life storage in the eventbus system.
 
-Here are a couple of src examples.
+Here are some examples of use.
 
 ```C++
 #include "eventbus.h"
