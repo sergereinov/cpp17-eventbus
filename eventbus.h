@@ -11,6 +11,7 @@ License: MIT
 #include <map>
 #include <vector>
 #include <any>
+#include <typeindex>
 
 //inspired by ref https://github.com/gelldur/EventBus
 
@@ -51,17 +52,9 @@ namespace eventbus
 	namespace internal
 	{
 		// event id helper ////////////////
+		using event_id_t = std::type_index;
 		template <typename T>
-		struct event_type_id_ptr
-		{
-			static const T* const id;
-		};
-		template <typename T>
-		const T* const event_type_id_ptr<T>::id = nullptr;
-
-		using event_id_t = const void*;
-		template <typename T>
-		constexpr event_id_t event_id() { return &event_type_id_ptr<T>::id; }
+		constexpr event_id_t event_id() { return std::type_index(typeid(T)); }
 		// --------------------------------
 
 		// vector helper //////////////////
