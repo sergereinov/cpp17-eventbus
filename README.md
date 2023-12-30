@@ -19,9 +19,46 @@ Just copy the eventbus.h header file to where you need it.
 
 ## How to use it
 
-TODO: add api mini-description.
+The API is pretty simple. There are only two entities that you need to know:
+- `eventbus::EventBus` is a long-lived bus object that stores all references to active callbacks along with everything that was captured by lambdas, etc.
+- `eventbus::Listener` is a manager for registering and removing callbacks.
 
-TODO: describe the warning about capturing `this` in lambda callback - the captured object can not be moved because its address has been captured (obviously) and stored in long-life storage in the eventbus system.
+**Step one:** create an event bus and place it somewhere where it will live long enough. Longer than all the callbacks registered in it.
+```C++
+auto bus = std::make_shared<eventbus::EventBus>();
+```
+
+**Step two:** create a listener object where you want to catch events. Then register a callback for the event using the `listen` method.
+The listener object uses the RAII approach, so as long as the listener exists, it will be connected to the event bus and all callbacks registered with this listener will receive events from the event bus.
+```C++
+auto listener = eventbus::Listener(bus);
+listener.listen<MyStateUpdate>([](const MyStateUpdate& e) {
+    //we got the MyStateUpdate event
+});
+```
+The event objects themselves do not require any special design. Usually these are simple structures that can be either empty structures or structures with some kind of payload.
+It is only required that these objects be CopyConstructable.
+Something like this:
+```C++
+struct RefreshRequired {};
+struct MyStateUpdate { int payload; };
+struct MessageReceived { std::string str; };
+```
+
+**Step three:** emit the event to the event bus.
+To immediately start executing all callbacks associated with an event, use the `immediate` method.
+```C++
+bus->immediate(MyStateUpdate{ 123 });
+```
+To prepare one or more events and emit them later, use a combination of the `post` and `process` methods.
+```C++
+bus->post(MessageReceived{ "hello" });
+bus->post(MessageReceived{ "world" });
+bus->process();
+```
+Inside the `process` method there is a loop with `immediate` for all events previously prepared with `post`.
+
+*TODO: describe the warning about capturing `this` in lambda callback - the captured object can not be moved because its address has been captured (obviously) and stored in long-life storage in the eventbus system.*
 
 Here are some examples of use.
 
